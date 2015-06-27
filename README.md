@@ -1,4 +1,4 @@
-# gulp-jasmine-webdriverio
+# gulp-jasmine-webdriverio (work in progress)
 gulp-jasmine-webdriver is a Gulp plugin to run Selenium tests with Jasmine and WebdriverIO
 
 Much of the source code drived from the excellant gulp-webdriver by christian-bromann, only difference is jasmine as the test framework as opposed to Mocha by the later.
