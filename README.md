@@ -26,21 +26,6 @@ gulp.task('default', function () {
 });
 ```
 
-
-## API
-
-### jasmineWebdriverio(options)
-
-#### options
-
-##### foo
-
-Type: `boolean`  
-Default: `false`
-
-Lorem ipsum.
-
-
 ## License
 
 MIT © [Senthanal Sirpi Manohar](https://github.com/senthanal/gulp-jasmine-webdriverio)
