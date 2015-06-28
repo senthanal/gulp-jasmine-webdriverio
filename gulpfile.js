@@ -2,8 +2,19 @@ var gulp = require('gulp');
 var jasmineWebdriverio = require('./index.js');
 var jshint = require('gulp-jshint');
 
-gulp.task('test', function() {
+gulp.task('regression-test', function() {
     return gulp.src('usecases/regressionTest.js', {
+        read: false
+    }).pipe(jasmineWebdriverio({
+        logLevel: 'verbose',
+        desiredCapabilities: {
+            browserName: 'phantomjs'
+        }
+    }));
+});
+
+gulp.task('test', function() {
+    return gulp.src('usecases/test.js', {
         read: false
     }).pipe(jasmineWebdriverio({
         logLevel: 'verbose',

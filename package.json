@@ -16,7 +16,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/gulp test",
+    "regression": "./node_modules/.bin/gulp regression-test"
   },
   "files": [
     "index.js"
