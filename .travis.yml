@@ -1,3 +1,5 @@
+sudo apt-get install graphicsmagick
+
 node_js:
   - '0.10'
 
