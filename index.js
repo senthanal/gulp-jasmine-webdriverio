@@ -18,7 +18,7 @@ var isSauceTunnelRunning = false;
 var path = require('path');
 var Jasmine = require('jasmine');
 var Reporter = require('jasmine-terminal-reporter');
-var SilentReporter = require('./silent-reporter');
+var SilentReporter = require('./silent-reporter.js');
 
 module.exports = function(args) {
 
