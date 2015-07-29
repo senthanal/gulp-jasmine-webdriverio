@@ -17,11 +17,11 @@ gulp.task('angularjs-regression-test', function() {
     return gulp.src('usecases/angularJsRegressionTest.js', {
         read: false
     }).pipe(jasmineWebdriverio({
-        logLevel: 'verbose',
+        logLevel: 'log',
         desiredCapabilities: {
             browserName: 'chrome'
         },
-		ngRoot: 'body' // main application selector
+		ngRoot: 'html' // main application selector
     }));
 });
 
