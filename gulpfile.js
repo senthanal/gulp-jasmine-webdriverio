@@ -27,6 +27,7 @@ gulp.task('angularjs-regression-test', function() {
 		read: false
 	}).pipe(jasmineWebdriverio({
 		logLevel: 'log',
+		timeout: 10000,
 		desiredCapabilities: {
 			browserName: 'chrome'
 		},

@@ -54,7 +54,7 @@ module.exports = function (args) {
 	 */
 	var jasmine = new Jasmine();
 	if (options.timeout) {
-		jasmine.jasmine.DEFAULT_TIMEOUT_INTERVAL = options.timeout;
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = options.timeout;
 	}
 	var color = process.argv.indexOf('--no-color') === -1;
 	var reporter = options.reporter;
@@ -66,7 +66,7 @@ module.exports = function (args) {
 		jasmine.addReporter(new Reporter({
 			isVerbose: options.verbose,
 			showColors: color,
-			includeStackTrace: options.includeStackTrace
+			includeStackTrace: options.includeStackTrace || false
 		}));
 	}
 
@@ -193,18 +193,7 @@ module.exports = function (args) {
 
 	};
 
-	var checkJasmineResults = function (result, callback) {
-		gutil.log('check jasmine test results');
-		if (result !== 0) {
-			this.emit('error', new gutil.PluginError('gulp-jasmine-webdriverio', result + ' ' + (result === 1 ? 'test' : 'tests') + ' failed.', {
-				showStack: false
-			}));
-		}
-
-		return callback(null, result);
-	};
-
-	var initWebdriver = function () {
+		var initWebdriver = function () {
 		var callback = arguments[arguments.length - 1];
 		gutil.log('init WebdriverIO instance');
 
@@ -233,7 +222,7 @@ module.exports = function (args) {
 
 		jasmine.onComplete(next(callback));
 		jasmine.addReporter(new SilentReporter(callback));
-		return jasmine.execute();
+		jasmine.execute();
 	};
 
 	var endSeleniumSession = function (callback) {
