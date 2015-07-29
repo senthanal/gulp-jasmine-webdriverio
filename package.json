@@ -1,6 +1,6 @@
 {
   "name": "gulp-jasmine-webdriverio",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "gulp-jasmine-webdriver is a Gulp plugin to run Selenium tests with Jasmine and WebdriverIO",
   "license": "MIT",
   "repository": {
@@ -21,13 +21,14 @@
   },
   "files": [
     "index.js",
-	  "silent-reporter.js"
+    "silent-reporter.js"
   ],
   "bugs": {
     "url": "https://github.com/senthanal/gulp-jasmine-webdriverio/issues"
   },
   "keywords": [
     "webdriverio",
+    "angularjs",
     "gulp",
     "selenium",
     "webdriver",
@@ -41,18 +42,19 @@
     "gulpplugin"
   ],
   "dependencies": {
-    "gulp-util": "^3.0.4",
-    "gulp-jshint": "1.10.0",
-    "through2": "^0.6.5",
     "async": "^0.9.0",
+    "deepmerge": "^0.2.7",
+    "gulp-jshint": "1.10.0",
+    "gulp-util": "^3.0.4",
     "jasmine": "^2.3.1",
     "jasmine-terminal-reporter": "^0.9.1",
-    "webdriverio": "^2.4.5",
-    "saucelabs": "^0.1.1",
+    "nock": "^1.7.1",
     "sauce-tunnel": "^2.2.3",
+    "saucelabs": "^0.1.1",
     "selenium-standalone": "^4.4.0",
-    "deepmerge": "^0.2.7",
-    "nock": "^1.7.1"
+    "through2": "^0.6.5",
+    "webdriverio": "^2.4.5",
+    "webdriverjs-angular": "^0.1.3"
   },
   "devDependencies": {
     "assert": "^1.3.0",

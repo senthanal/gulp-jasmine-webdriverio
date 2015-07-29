@@ -6,6 +6,7 @@ var SauceLabs = require('saucelabs');
 var SauceTunnel = require('sauce-tunnel');
 var selenium = require('selenium-standalone');
 var webdriverio = require('webdriverio');
+var webdriverjsAngular = require('webdriverjs-angular');
 var http = require('http');
 var async = require('async');
 var merge = require('deepmerge');
@@ -20,7 +21,7 @@ var Jasmine = require('jasmine');
 var Reporter = require('jasmine-terminal-reporter');
 var SilentReporter = require('./silent-reporter.js');
 
-module.exports = function(args) {
+module.exports = function (args) {
 
 	var options = args || {},
 		sessionID = null,
@@ -46,7 +47,7 @@ module.exports = function(args) {
 	 */
 	gutil.log('run webdriverio with following capabilities: ' + JSON.stringify(options));
 	options.logLevel = options.quiet ? 'silent' : options.logLevel;
-	GLOBAL.browser = webdriverio.remote(options);
+	GLOBAL.browser = typeof options.ngRoot == 'undefined' ? webdriverio.remote(options) : webdriverjsAngular.remote(options);
 
 	/**
 	 * initialize Jasmine
@@ -190,6 +191,17 @@ module.exports = function(args) {
 			return callback(null, true);
 		}
 
+	};
+
+	var checkJasmineResults = function (result, callback) {
+		gutil.log('check jasmine test results');
+		if (result !== 0) {
+			this.emit('error', new gutil.PluginError('gulp-jasmine-webdriverio', result + ' ' + (result === 1 ? 'test' : 'tests') + ' failed.', {
+				showStack: false
+			}));
+		}
+
+		return callback(null, result);
 	};
 
 	var initWebdriver = function () {
