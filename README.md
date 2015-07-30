@@ -26,6 +26,23 @@ gulp.task('default', function () {
 });
 ```
 
+```Regression test
+var gulp = require('gulp');
+var jasmineWebdriverio = require('gulp-jasmine-webdriverio');
+
+gulp.task('default', function () {
+	return gulp.src('src/file.ext')
+		.pipe(jasmineWebdriverio({
+			configFile: './wdio.conf.js',
+			args: {
+				logLevel: 'log'
+				,ngRoot: 'html' // main application selector
+			}
+		}))
+		.pipe(gulp.dest('dist'));
+});
+```
+
 ## License
 
 MIT © [Senthanal Sirpi Manohar](https://github.com/senthanal/gulp-jasmine-webdriverio)
