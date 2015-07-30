@@ -15,7 +15,7 @@ $ npm install --save-dev gulp-jasmine-webdriverio
 
 ## Usage
 
-```js
+```
 var gulp = require('gulp');
 var jasmineWebdriverio = require('gulp-jasmine-webdriverio');
 
@@ -26,7 +26,7 @@ gulp.task('default', function () {
 });
 ```
 
-```Regression test
+```
 var gulp = require('gulp');
 var jasmineWebdriverio = require('gulp-jasmine-webdriverio');
 
