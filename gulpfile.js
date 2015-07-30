@@ -25,14 +25,14 @@ gulp.task('regression-test', function() {
 gulp.task('angularjs-regression-test', function() {
 	return gulp.src('usecases/angularJsRegressionTest.js', {
 		read: false
-	}).pipe(jasmineWebdriverio({
-		logLevel: 'log',
-		timeout: 10000,
-		desiredCapabilities: {
-			browserName: 'chrome'
-		},
-		ngRoot: 'html' // main application selector
-	}));
+	})
+		.pipe(jasmineWebdriverio({
+			configFile: './wdio.conf.js',
+			args: {
+				logLevel: 'log'
+				,ngRoot: 'html' // main application selector
+			}
+		}));
 });
 
 gulp.task('test', function() {

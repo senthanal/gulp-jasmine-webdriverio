@@ -16,14 +16,15 @@ var tunnel = null;
 var seleniumServer = null;
 var isSauceTunnelRunning = false;
 
-var path = require('path');
 var Jasmine = require('jasmine');
+var jasmineReporters = require('jasmine-reporters');
 var Reporter = require('jasmine-terminal-reporter');
-var SilentReporter = require('./silent-reporter.js');
+var SpecReporter = require('jasmine-spec-reporter');
 
 module.exports = function (args) {
-
-	var options = args || {},
+	var configs = typeof args.configFile == 'undefined' ? {} : require(args.configFile).config;
+	var mergedOptions = merge(configs,args.args) || {};
+	var options = mergedOptions || {},
 		sessionID = null,
 		seleniumOptions = options.seleniumOptions || {},
 		seleniumInstallOptions = options.seleniumInstallOptions || {},
@@ -60,7 +61,7 @@ module.exports = function (args) {
 	var reporter = options.reporter;
 	if (reporter) {
 		(Array.isArray(reporter) ? reporter : [reporter]).forEach(function (el) {
-			jasmine.addReporter(el);
+			jasmine.addReporter(getReporter(el));
 		});
 	} else {
 		jasmine.addReporter(new Reporter({
@@ -68,6 +69,30 @@ module.exports = function (args) {
 			showColors: color,
 			includeStackTrace: options.includeStackTrace || false
 		}));
+	}
+
+	/**
+	 * Returns relevant jasmine reporter instance
+	 * @param type
+	 * @returns {*}
+	 */
+	 function getReporter(type){
+		var reporter;
+		switch(type.name){
+			case 'XUnit':
+				reporter = new jasmineReporters.JUnitXmlReporter(type.options);
+				break;
+			case 'Terminal':
+				reporter = new Reporter(type.options);
+				break;
+			case 'Spec':
+				reporter = new SpecReporter(type.options);
+				break;
+			case 'Dot':
+				reporter = new jasmineReporters.TerminalReporter(type.options);
+				break;
+		}
+		return reporter;
 	}
 
 	/**
@@ -193,7 +218,7 @@ module.exports = function (args) {
 
 	};
 
-		var initWebdriver = function () {
+	var initWebdriver = function () {
 		var callback = arguments[arguments.length - 1];
 		gutil.log('init WebdriverIO instance');
 
@@ -221,7 +246,6 @@ module.exports = function (args) {
 		sessionID = GLOBAL.browser.requestHandler.sessionID;
 
 		jasmine.onComplete(next(callback));
-		jasmine.addReporter(new SilentReporter(callback));
 		jasmine.execute();
 	};
 

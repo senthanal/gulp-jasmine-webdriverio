@@ -3,6 +3,8 @@
  */
 
 var webdrivercss = require('webdrivercss');
+var webdrivercssConfig = require('../webdrivercss.conf.js').config;
+
 // All configuration goes here, to allow easier boilerplating.
 var options = {
 	test: {
@@ -10,18 +12,13 @@ var options = {
 		name: 'angularjs',
 		url: 'http://angular.github.io/angular-phonecat/step-7/app/#/phones', // this needs to be a real URL
 		selector: 'body'
-	},
-	webdrivercss: {
-		screenshotRoot: 'reports/visual/reference',
-		failedComparisonsRoot: 'reports/visual/failed',
-		misMatchTolerance: 0.05,
-		screenWidth: [1024]
 	}
 };
+
 describe('gulp-jasmine-webdriverio test', function () {
 	beforeEach(function(){
 		// Initialize webdrivercss
-		webdrivercss.init(browser, options.webdrivercss);
+		webdrivercss.init(browser, webdrivercssConfig);
 	});
 
 	it('checks if page contains motorola xoom phone', function(done) {

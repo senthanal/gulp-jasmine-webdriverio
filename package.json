@@ -47,6 +47,8 @@
     "gulp-jshint": "1.10.0",
     "gulp-util": "^3.0.4",
     "jasmine": "^2.3.1",
+    "jasmine-reporters": "^2.0.7",
+    "jasmine-spec-reporter": "^2.4.0",
     "jasmine-terminal-reporter": "^0.9.1",
     "nock": "^1.7.1",
     "sauce-tunnel": "^2.2.3",
