@@ -6,6 +6,7 @@ var yargs = require('yargs').argv;
 var git = require('gulp-git');
 var fs = require('fs');
 var run = require('gulp-run');
+var github_release = require('gulp-github-release');
 var getPackageJson = function () {
 	return JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 };
@@ -88,7 +89,11 @@ gulp.task('npmPublish', ['push'], function (done) {
 	run('npm publish').exec();
 });
 
-gulp.task('release', ['bump', 'tag', 'push', 'commit', 'npmPublish'], function(){});
+gulp.task('githubRelease', ['npmPublish'], function (done) {
+	github_release();
+});
+
+gulp.task('release', ['bump', 'tag', 'push', 'commit', 'npmPublish', 'githubRelease'], function(){});
 
 gulp.task('default', function(){
 	gulp.watch("./index.js", ['linting']);
