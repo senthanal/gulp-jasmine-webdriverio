@@ -78,12 +78,13 @@ gulp.task('push', ['tag'], function(){
 gulp.task('tag', ['commit'], function(){
 	// reget package
 	var pkg = getPackageJson();
-	git.tag(pkg.version, yargs.type + ' release version', function (err) {
+	git.tag(pkg.version, pkg.version + ' released version', function (err) {
 		if (err) throw err;
 	});
 });
 
 gulp.task('npmPublish', ['push'], function (done) {
+	run('npm prune').exec();
 	run('npm publish').exec();
 });
 
