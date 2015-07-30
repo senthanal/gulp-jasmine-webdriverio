@@ -2,9 +2,6 @@
  * Created by sm on 27.06.2015.
  */
 
-// Use webdriverio instance
-var client = GLOBAL.browser;
-
 var webdrivercss = require('webdrivercss');
 // All configuration goes here, to allow easier boilerplating.
 var options = {
@@ -25,11 +22,11 @@ var options = {
 describe('example', function () {
 	beforeEach(function(){
 		// Initialize webdrivercss
-		webdrivercss.init(client, options.webdrivercss);
+		webdrivercss.init(browser, options.webdrivercss);
 	});
 
 	it('should look the same', function (done) {
-		client
+		browser
 			.url(options.test.url)
 			.webdrivercss(options.test.title, {
 				name: options.test.name,
@@ -42,6 +39,6 @@ describe('example', function () {
 	});
 
 	afterEach(function (done) {
-		client.end(done);
+		browser.end(done);
 	});
 });

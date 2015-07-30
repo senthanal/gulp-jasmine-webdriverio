@@ -16,9 +16,11 @@ gulp.task('regression-test', function() {
 	return gulp.src('usecases/regressionTest.js', {
 		read: false
 	}).pipe(jasmineWebdriverio({
-		logLevel: 'verbose',
-		desiredCapabilities: {
-			browserName: 'phantomjs'
+		args: {
+			logLevel: 'verbose',
+			desiredCapabilities: {
+				browserName: 'phantomjs'
+			}
 		}
 	}));
 });
