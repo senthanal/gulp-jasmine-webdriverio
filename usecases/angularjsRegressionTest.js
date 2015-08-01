@@ -17,6 +17,7 @@ var options = {
 
 describe('gulp-jasmine-webdriverio test', function () {
 	beforeEach(function(){
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 		// Initialize webdrivercss
 		webdrivercss.init(browser, webdrivercssConfig);
 	});
