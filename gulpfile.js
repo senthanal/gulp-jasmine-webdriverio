@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var istanbul = require('gulp-istanbul');
 var jasmineWebdriverio = require('./index.js');
 var jshint = require('gulp-jshint');
 var bump = require('gulp-bump');
@@ -11,6 +12,40 @@ var getPackageJson = function () {
 	return JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 };
 
+// We'll use mocha here, but any test framework will work
+var mocha = require('gulp-mocha');
+
+gulp.task('unit-test', function (cb) {
+	return gulp.src(['index.js'])
+		.pipe(istanbul()) // Covering files
+		.pipe(istanbul.hookRequire()) // Force `require` to return covered files
+		.on('finish', function () {
+			return gulp.src(['test/*.js'])
+				.pipe(mocha({
+					reporter: 'spec',
+					globals: {
+						should: require('should')
+					}
+				}))
+				.pipe(istanbul.writeReports({
+					dir: './reports/coverage',
+					reporters: [ 'lcov', 'json', 'text', 'text-summary' ],
+					reportOpts: { dir: './reports/coverage' }
+				})) // Creating the reports after tests ran
+				.pipe(istanbul.enforceThresholds({ thresholds: {
+					global: 80,
+					each: 60
+				} })) // Enforce a coverage of at least 80%
+				.on('error', function(e){
+					throw e.message;
+				})
+				.on('end', function(){});
+		});
+});
+
+gulp.task('watch-test', function() {
+	gulp.watch(['index.js', 'test/*.js'], ['unit-test']);
+});
 
 gulp.task('regression-test', function() {
 	return gulp.src('usecases/regressionTest.js', {

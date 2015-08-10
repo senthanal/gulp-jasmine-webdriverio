@@ -22,7 +22,8 @@ var Reporter = require('jasmine-terminal-reporter');
 var SpecReporter = require('jasmine-spec-reporter');
 
 module.exports = function (args) {
-	var configs = typeof args.configFile == 'undefined' ? {} : require(args.configFile).config;
+	args = typeof args === 'undefined' ? {configFile: undefined, args: {}} : args;
+	var configs = typeof args.configFile === 'undefined' ? {} : require(args.configFile).config;
 	var mergedOptions = merge(configs,args.args) || {};
 	var options = mergedOptions || {},
 		sessionID = null,
@@ -48,7 +49,7 @@ module.exports = function (args) {
 	 */
 	gutil.log('run webdriverio with following capabilities: ' + JSON.stringify(options));
 	options.logLevel = options.quiet ? 'silent' : options.logLevel;
-	GLOBAL.browser = typeof options.ngRoot == 'undefined' ? webdriverio.remote(options) : webdriverjsAngular.remote(options);
+	GLOBAL.browser = typeof options.ngRoot === 'undefined' ? webdriverio.remote(options) : webdriverjsAngular.remote(options);
 
 	/**
 	 * initialize Jasmine
