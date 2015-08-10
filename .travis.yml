@@ -13,7 +13,7 @@ before_install:
   - sudo apt-get install -y graphicsmagick
   - npm install
 
-script: "npm run regression && unit-test"
+script: "npm run regression && gulp unit-test"
 
 after_script:
   - cat reports/coverage/lcov.info | codeclimate; fi
