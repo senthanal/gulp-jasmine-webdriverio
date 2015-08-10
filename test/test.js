@@ -8,7 +8,12 @@ var jasmineWebdriverio = require('../index.js');
 
 describe('jasmineWebdriverio =>', function() {
 	it('jasmineWebdriverio should be defined', function (done) {
-		var stream = jasmineWebdriverio();
+		var stream = jasmineWebdriverio({
+			configFile: './wdio.conf.js',
+			args: {
+				logLevel: 'log'
+			}
+		});
 		stream.on('end', function() {
 			stream.should.exist();
 		});
