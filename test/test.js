@@ -11,7 +11,10 @@ describe('jasmineWebdriverio =>', function() {
 		var stream = jasmineWebdriverio({
 			configFile: './wdio.conf.js',
 			args: {
-				logLevel: 'log'
+				logLevel: 'log',
+				desiredCapabilities: {
+					browserName: 'chrome'
+				}
 			}
 		});
 		stream.on('end', function() {
