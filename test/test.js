@@ -11,9 +11,19 @@ describe('jasmineWebdriverio =>', function() {
 		var stream = jasmineWebdriverio({
 			configFile: './wdio.conf.js',
 			args: {
-				logLevel: 'log',
+				updateSauceJob: true,
+				logLevel: 'verbose',
+				user: process.env.SAUCE_USERNAME,
+				key: process.env.SAUCE_ACCESS_KEY,
+				host: 'ondemand.saucelabs.com',
+				port: 80,
 				desiredCapabilities: {
-					browserName: 'chrome'
+					browserName: 'chrome',
+					platform: 'Windows 8',
+					version: '44',
+					tags: ['chrome', 'Windows 8', '44'],
+					name: 'gulp-jasmine-webdriverio test',
+					build: process.env.TRAVIS_BUILD_NUMBER
 				}
 			}
 		});
