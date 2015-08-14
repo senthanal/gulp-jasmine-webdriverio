@@ -1,5 +1,8 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
+var gs = require('glob-stream');
 var through = require('through2');
 var gutil = require('gulp-util');
 var SauceLabs = require('saucelabs');
@@ -10,10 +13,12 @@ var webdriverjsAngular = require('webdriverjs-angular');
 var http = require('http');
 var async = require('async');
 var merge = require('deepmerge');
+var phantomjs = require('phantomjs');
+
 var server = null;
 var isSeleniumServerRunning = false;
-var tunnel = null;
 var seleniumServer = null;
+var tunnel = null;
 var isSauceTunnelRunning = false;
 
 var Jasmine = require('jasmine');
@@ -24,13 +29,25 @@ var SpecReporter = require('jasmine-spec-reporter');
 module.exports = function (args) {
 	args = typeof args === 'undefined' ? {configFile: undefined, args: {}} : args;
 	var configs = typeof args.configFile === 'undefined' ? {} : require(args.configFile).config;
-	var mergedOptions = merge(configs,args.args) || {};
+	var argsArgs = typeof args.args === 'undefined' ? {} : args.args;
+	var mergedOptions = merge(configs, argsArgs);
 	var options = mergedOptions || {},
 		sessionID = null,
-		seleniumOptions = options.seleniumOptions || {},
+		seleniumOptions = merge((options.seleniumOptions || {}), {
+			host: 'localhost',
+			port: 4444,
+			role: 'hub',
+			path: '/wd/hub/status'
+		}),
 		seleniumInstallOptions = options.seleniumInstallOptions || {},
 		tunnelIdentifier = options.desiredCapabilities && options.desiredCapabilities['tunnel-identifier'] ? options.desiredCapabilities['tunnel-identifier'] : null,
 		tunnelFlags = options.desiredCapabilities && options.desiredCapabilities['tunnel-flags'] ? options.desiredCapabilities['tunnel-flags'] : [];
+
+	// Setup phantomjs binary path manually
+	if (typeof options.desiredCapabilities != 'undefined'
+		&& options.desiredCapabilities.browserName == 'phantomjs') {
+		options.desiredCapabilities['phantomjs.binary.path'] = phantomjs.path
+	}
 
 	/**
 	 * initialise tunnel
@@ -40,8 +57,8 @@ module.exports = function (args) {
 		tunnel = new SauceTunnel(options.user, options.key, tunnelIdentifier, true, tunnelFlags);
 		tunnel.on('verbose:debug', gutil.log);
 
-		options.host = undefined;
-		options.port = 4445;
+		seleniumOptions.host = undefined;
+		seleniumOptions.port = 4445;
 	}
 
 	/**
@@ -56,7 +73,7 @@ module.exports = function (args) {
 	 */
 	var jasmine = new Jasmine();
 	if (options.timeout) {
-		jasmine.DEFAULT_TIMEOUT_INTERVAL = options.timeout;
+		jasmine.jasmine.DEFAULT_TIMEOUT_INTERVAL = options.timeout;
 	}
 	var color = process.argv.indexOf('--no-color') === -1;
 	var reporter = options.reporter;
@@ -77,9 +94,9 @@ module.exports = function (args) {
 	 * @param type
 	 * @returns {*}
 	 */
-	 function getReporter(type){
+	function getReporter(type) {
 		var reporter;
-		switch(type.name){
+		switch (type.name) {
 			case 'XUnit':
 				reporter = new jasmineReporters.JUnitXmlReporter(type.options);
 				break;
@@ -124,13 +141,7 @@ module.exports = function (args) {
 
 		gutil.log('checking if selenium is running');
 
-		var opts = {
-			host: options.host || 'localhost',
-			port: options.port || 4444,
-			path: '/wd/hub/status'
-		};
-
-		return http.get(opts, function (res) {
+		return http.get(seleniumOptions, function (res) {
 			gutil.log('selenium is running');
 			isSeleniumServerRunning = true;
 			// Gulp seems to hang when HTTP requests are made, and that's how selenium is queried.
@@ -201,7 +212,7 @@ module.exports = function (args) {
 			 * starts selenium standalone server if its not running
 			 */
 
-			server = selenium.start(seleniumOptions, function (err, child) {
+			server = selenium.start({seleniumArgs :seleniumOptions}, function (err, child) {
 				if (err) {
 					return callback(err);
 				}
@@ -339,9 +350,22 @@ module.exports = function (args) {
 		return stream;
 	};
 
-	return through.obj(function (file, enc, callback) {
+	function addFileToJasmine(file, enc, callback) {
+		console.log(file);
 		this.push(file);
 		jasmine.addSpecFile(file.path);
 		callback();
-	}, runWebdriverIOTests);
+	}
+
+	var outputStream;
+	if(typeof options.specs === 'undefined'){
+		outputStream = through.obj(addFileToJasmine, runWebdriverIOTests);
+	}
+	else{
+		outputStream = gs.create(options.specs);
+		return outputStream
+			.pipe(through.obj(addFileToJasmine, runWebdriverIOTests));
+	}
+	return outputStream;
+
 };

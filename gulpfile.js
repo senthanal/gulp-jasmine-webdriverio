@@ -16,11 +16,16 @@ var getPackageJson = function () {
 var mocha = require('gulp-mocha');
 
 gulp.task('unit-test', function (cb) {
+	var srcs = typeof yargs.env == 'undefined'
+					? ['test/test.js']
+					: typeof yargs.env == 'local'
+						? ['test/test.js']
+						: ['test/test-ci.js'];
 	return gulp.src(['index.js'])
 		.pipe(istanbul()) // Covering files
 		.pipe(istanbul.hookRequire()) // Force `require` to return covered files
 		.on('finish', function () {
-			return gulp.src(['test/*.js'])
+			return gulp.src(srcs)
 				.pipe(mocha({
 					reporter: 'spec',
 					globals: {
@@ -43,14 +48,17 @@ gulp.task('unit-test', function (cb) {
 		});
 });
 
-gulp.task('watch-test', function() {
-	gulp.watch(['index.js', 'test/*.js'], ['unit-test']);
+gulp.task('watch-test', ['unit-test'], function() {
+	gulp.watch(['index.js', 'test/*.js'], function (event) {
+		gulp.start('unit-test');
+	});
 });
 
 gulp.task('regression-test', function() {
 	return gulp.src('usecases/regressionTest.js', {
 		read: false
-	}).pipe(jasmineWebdriverio({
+	})
+		.pipe(jasmineWebdriverio({
 		args: {
 			logLevel: 'verbose',
 			desiredCapabilities: {

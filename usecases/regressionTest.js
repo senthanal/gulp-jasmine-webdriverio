@@ -21,6 +21,7 @@ var options = {
 
 describe('example', function () {
 	beforeEach(function(){
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 		// Initialize webdrivercss
 		webdrivercss.init(browser, options.webdrivercss);
 	});
@@ -34,7 +35,6 @@ describe('example', function () {
 			}, function(err, res) {
 				expect(res[options.test.name][0].isWithinMisMatchTolerance).toBeTruthy();
 			})
-			.end()
 			.call(done);
 	});
 

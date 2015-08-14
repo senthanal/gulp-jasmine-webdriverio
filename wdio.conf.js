@@ -9,22 +9,94 @@ exports.config = {
 	/**
 	 * selenium server configurations
 	 */
-	host: 'localhost',
-	port: 4444,
+	seleniumOptions:{
+		port: 4444,
+		role: 'hub'
+	},
+	/*seleniumInstallOptions: {
+		// check for more recent versions of selenium here:
+		// http://selenium-release.storage.googleapis.com/index.html
+		version: '2.45.0',
+		baseURL: 'http://selenium-release.storage.googleapis.com',
+		drivers: {
+			chrome: {
+				version: '2.15',
+				arch: process.arch,
+				baseURL: 'http://chromedriver.storage.googleapis.com'
+			},
+			ie: {
+				version: '2.45.0',
+				arch: process.arch,
+				baseURL: 'http://selenium-release.storage.googleapis.com'
+			}
+		},
+		logger: function(message) {
 
-	/**
-	 * specify test files
-	 */
-	specs: ['./usecases/angularJsRegressionTest.js'], //we configure it on gulp task or here
+		},
+		progressCb: function(totalLength, progressLength, chunkLength) {
 
-	exclude: [],
-
+		}
+	},*/
 	/**
 	 * capabilities
 	 */
 	desiredCapabilities: {
 		browserName: 'chrome'
 	},
+	/**
+	 * Reporters
+	 */
+	reporter: [
+		/*{
+			name: 'XUnit',
+			options: {
+				consolidateAll: true,
+				filePrefix: 'visualtest-xmloutput',
+				savePath: './reports/visual'
+			}
+		}*/
+		/*,{
+		 name: 'Dot',
+		 options: {
+		 verbosity: 2,
+		 color: true,
+		 showStack: false
+		 }
+		 }*/
+		/*,{
+		 name: 'Terminal',
+		 options: {
+		 isVerbose: 'silent',
+		 showColors: true,
+		 includeStackTrace: false
+		 }
+		 }*/
+		/*,{
+		 name: 'Spec',
+		 options: {
+		 displayStacktrace: 'none',
+		 displayFailuresSummary: true,
+		 displayPendingSummary: true,
+		 displaySuccessfulSpec: true,
+		 displayFailedSpec: true,
+		 displayPendingSpec: true,
+		 displaySpecDuration: false,
+		 displaySuiteNumber: false,
+		 colors: {
+		 success: 'green',
+		 failure: 'red',
+		 pending: 'yellow'
+		 },
+		 prefixes: {
+		 success: '✓ ',
+		 failure: '✗ ',
+		 pending: '* '
+		 },
+		 customProcessors: []
+		 }
+		 }*/
+	],
+
 
 	/**
 	 * test configurations
@@ -33,68 +105,11 @@ exports.config = {
 	coloredLogs: true,
 	screenshotPath: './reports/visual/reference',
 	baseUrl: 'http://angular.github.io/angular-phonecat/step-7/app/#/phones',
-	timeout: 10000,
+	timeout: 50000,
 	framework: 'jasmine2',
-
-	reporter: [
-		/*{
-			name: 'XUnit',
-			options: {
-				consolidateAll: true,
-				filePrefix: 'visualtest-xmloutput',
-				savePath: './reports'
-			}
-		}*/
-		/*,{
-			name: 'Dot',
-			options: {
-				verbosity: 2,
-				color: true,
-				showStack: false
-			}
-		}*/
-		/*,{
-			name: 'Terminal',
-			options: {
-				isVerbose: 'silent',
-				showColors: true,
-				includeStackTrace: false
-			}
-		}*/
-		/*,{
-			name: 'Spec',
-			options: {
-				displayStacktrace: 'none',
-				displayFailuresSummary: true,
-				displayPendingSummary: true,
-				displaySuccessfulSpec: true,
-				displayFailedSpec: true,
-				displayPendingSpec: true,
-				displaySpecDuration: false,
-				displaySuiteNumber: false,
-				colors: {
-					success: 'green',
-					failure: 'red',
-					pending: 'yellow'
-				},
-				prefixes: {
-					success: '✓ ',
-					failure: '✗ ',
-					pending: '* '
-				},
-				customProcessors: []
-			}
-		}*/
-	],
-
-	jasmineNodeOpts: {
-		// If true, display spec names.
-		isVerbose: true,
-		// If true, print colors to the terminal.
-		showColors: true,
-		// If true, include stack traces in failures.
-		includeStackTrace: true,
-		// Default time to wait in ms before a test fails.
-		defaultTimeoutInterval: 30000
-	}
+	specs: [
+		'usecases/angularJsRegressionTest.js',
+		'usecases/regressionTest.js'
+	], //we configure it on gulp task or here
+	exclude: []
 };
