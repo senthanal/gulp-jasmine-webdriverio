@@ -37,8 +37,4 @@ describe('example', function () {
 			})
 			.call(done);
 	});
-
-	afterEach(function (done) {
-		browser.end(done);
-	});
 });

@@ -3,7 +3,6 @@
  */
 
 var webdrivercss = require('webdrivercss');
-var webdrivercssConfig = require('../webdrivercss.conf.js').config;
 
 // All configuration goes here, to allow easier boilerplating.
 var options = {
@@ -19,7 +18,7 @@ describe('gulp-jasmine-webdriverio test', function () {
 	beforeEach(function(){
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 		// Initialize webdrivercss
-		webdrivercss.init(browser, webdrivercssConfig);
+		webdrivercss.init(browser);
 	});
 
 	it('checks if page contains motorola xoom phone', function(done) {
@@ -60,9 +59,4 @@ describe('gulp-jasmine-webdriverio test', function () {
 			})
 			.call(done);
 	});
-
-	afterAll(function (done) {
-		browser.end(done);
-	});
-
 });
