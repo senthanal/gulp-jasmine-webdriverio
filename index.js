@@ -39,7 +39,7 @@ module.exports = function (args) {
 			role: 'hub',
 			path: '/wd/hub/status'
 		}),
-		seleniumInstallOptions = options.seleniumInstallOptions || {},
+		seleniumInstallOptions = options.seleniumInstallOptions,
 		tunnelIdentifier = options.desiredCapabilities && options.desiredCapabilities['tunnel-identifier'] ? options.desiredCapabilities['tunnel-identifier'] : null,
 		tunnelFlags = options.desiredCapabilities && options.desiredCapabilities['tunnel-flags'] ? options.desiredCapabilities['tunnel-flags'] : [];
 
@@ -161,6 +161,10 @@ module.exports = function (args) {
 	 *  install drivers if needed
 	 */
 	var installDrivers = function (callback) {
+		if(typeof seleniumInstallOptions === 'undefined') {
+			return callback(null);
+		}
+
 		if (tunnel || isSeleniumServerRunning) {
 			return callback(null);
 		}
@@ -351,14 +355,13 @@ module.exports = function (args) {
 	};
 
 	function addFileToJasmine(file, enc, callback) {
-		console.log(file);
 		this.push(file);
 		jasmine.addSpecFile(file.path);
 		callback();
 	}
 
 	var outputStream;
-	if(typeof options.specs === 'undefined'){
+	if(typeof options.specs === 'undefined' || options.specs == '' || options.specs.length === 0){
 		outputStream = through.obj(addFileToJasmine, runWebdriverIOTests);
 	}
 	else{

@@ -49,7 +49,7 @@ gulp.task('unit-test', function (cb) {
 });
 
 gulp.task('watch-test', ['unit-test'], function() {
-	gulp.watch(['index.js', 'test/*.js'], function (event) {
+	gulp.watch(['index.js', 'test/*.js', 'wdio.conf.js'], function (event) {
 		gulp.start('unit-test');
 	});
 });
@@ -73,7 +73,7 @@ gulp.task('angularjs-regression-test', function() {
 		read: false
 	})
 		.pipe(jasmineWebdriverio({
-			configFile: './wdio.conf.js',
+			//configFile: './wdio.conf.js',
 			args: {
 				logLevel: 'log'
 				,ngRoot: 'html' // main application selector
@@ -82,12 +82,15 @@ gulp.task('angularjs-regression-test', function() {
 });
 
 gulp.task('test', function() {
-	return gulp.src('usecases/test.js', {
+	return gulp.src('usecases/test*.js', {
 		read: false
 	}).pipe(jasmineWebdriverio({
-		logLevel: 'verbose',
-		desiredCapabilities: {
-			browserName: 'chrome'
+		configFile: './wdio.conf.js',
+		args: {
+			logLevel: 'verbose',
+			desiredCapabilities: {
+				browserName: 'phantomjs'
+			}
 		}
 	}));
 });
