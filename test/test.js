@@ -3,7 +3,6 @@
  */
 
 'use strict';
-var should = require('should');
 var jasmineWebdriverio = require('../index.js');
 
 describe('jasmineWebdriverio =>', function() {

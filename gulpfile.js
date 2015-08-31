@@ -32,19 +32,21 @@ gulp.task('unit-test', function (cb) {
 						should: require('should')
 					}
 				}))
-				.pipe(istanbul.writeReports({
-					dir: './reports/coverage',
-					reporters: [ 'lcov', 'json', 'text', 'text-summary' ],
-					reportOpts: { dir: './reports/coverage' }
-				})) // Creating the reports after tests ran
-				.pipe(istanbul.enforceThresholds({ thresholds: {
-					global: 10,
-					each: 10
-				} })) // Enforce a coverage of at least 80%
-				.on('error', function(e){
-					throw e.message;
-				})
-				.on('end', function(){});
+				.on('end', function(){
+					return gulp.src(['index.js'])
+					.pipe(istanbul.writeReports({
+						dir: './reports/coverage',
+						reporters: [ 'lcov', 'json', 'text', 'text-summary' ],
+						reportOpts: { dir: './reports/coverage' }
+					})) // Creating the reports after tests ran
+						.pipe(istanbul.enforceThresholds({ thresholds: {
+							global: 10,
+							each: 10
+						} })) // Enforce a coverage of at least 80%
+						.on('error', function(e){
+							throw e.message;
+						})
+				});
 		});
 });
 
