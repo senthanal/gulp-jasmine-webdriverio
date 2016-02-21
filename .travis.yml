@@ -12,7 +12,7 @@ before_install:
   - sudo apt-get install -y graphicsmagick
   - npm install
 
-script: "npm run regression && gulp unit-test"
+script: "npm run regression"
 
 after_script:
   - CODECLIMATE_REPO_TOKEN=62a8b57fa1d855268b67ef956de0991851778758e6036b0981fd956d913f715f codeclimate-test-reporter < reports/coverage/lcov.info
