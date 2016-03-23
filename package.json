@@ -16,6 +16,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "preinstall": "npm prune || npm cache clean",
     "postinstall": "selenium-standalone install",
     "test": "./node_modules/.bin/gulp test",
     "regression": "./node_modules/.bin/gulp regression-test"
