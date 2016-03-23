@@ -13,7 +13,7 @@ var webdriverjsAngular = require('webdriverjs-angular');
 var http = require('http');
 var async = require('async');
 var merge = require('deepmerge');
-var phantomjs = require('phantomjs');
+var phantomjs = require('phantomjs-prebuilt');
 
 var server = null;
 var isSeleniumServerRunning = false;
